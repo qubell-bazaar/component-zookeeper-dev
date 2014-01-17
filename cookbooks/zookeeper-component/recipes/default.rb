@@ -6,6 +6,14 @@ p = package "patch" do
 end
 p.run_action(:install)
 
+node.set[:exhibitor][:opts][:defaultconfig]="#{node[:exhibitor][:install_dir]}/defaultconfig.exhibitor"
+
+template "/etc/init/exhibitor.conf" do
+    cookbook "zookeeper-component"
+    source "exhibitor.upstart.conf.erb"
+    action :nothing
+end
+
 include_recipe "zookeeper"
 
 if platform_family?('rhel')
