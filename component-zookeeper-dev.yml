@@ -46,7 +46,7 @@ application:
         result:
           zookeeper-hosts: publish-signal(list<string>)
           zookeeper-ui: publish-signal(list<string>)
-          zookeeper-nodes: publish-signal(string)
+          zookeeper-nodes: publish-signal(list<string>)
 
         keypair-store: 
           get-keypair: send-command(string id => object privateKey)
@@ -104,47 +104,13 @@ application:
                           election_port: "{$.zookeeper-elect-port}"
                       zookeeper:
                         hosts: "{$.zoo-hosts-privatIp}"
-              - provision-node:
-                  action: provisionVms
-                  phase: provision-node
-                  precedingPhases: [ deploy-zoo ]
-                  parameters:
-                    roleName: exec-vm
-                    hardwareId: ""
-                    vmIdentity: ubuntu
-                    retryCount: 0
-                    staticIps: ["{$.zoo-hosts[0]}"]
-              - serialize-nodes:
-                  action: serialize
-                  phase: serialize-nodes
-                  precedingPhases: [provision-node]
-                  parameters:
-                    format: CSV
-                    input: ["{$.zoo-hosts-privatIp}:{$.zookeeper-cli-port}"]
-                  output:
-                    serialived-nodes: serialized
-              - return-zoo-uri:
-                  action: "execrun"
-                  phase: return-zoo-uri
-                  precedingPhases: [serialize-nodes]
-                  parameters:
-                    roles: [exec-vm]
-                    command:
-                      - bash
-                      - "-c"
-                      - !
-                        nodes={$.serialived-nodes}
-                        echo -n $$nodes | tr -d '"'
-                  output:
-                    zoo-uri: stdout
-
             return:
               zookeeper-hosts:
                 value: "{$.zoo-hosts}"
               zookeeper-ui:
                 value: "http://{$.zoo-hosts}:{$.exhibitor-port}/exhibitor/v1/ui/index.html"
               zookeeper-nodes:
-                value: "{$.zoo-uri['*'][0]}"
+                value: "{$.zoo-hosts-privatIp}"
 
           destroy:
             steps:
