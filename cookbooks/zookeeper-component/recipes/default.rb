@@ -8,6 +8,16 @@ p.run_action(:install)
 
 node.set[:exhibitor][:opts][:defaultconfig]="#{node[:exhibitor][:install_dir]}/defaultconfig.exhibitor"
 
+if (node[:zookeeper][:hosts].nil?)
+  node.normal[:zookeeper][:hosts]=[ node[:ipaddress] ]
+end
+
+template node[:exhibitor][:opts][:defaultconfig] do
+  cookbook "zookeeper-component"
+  source "defaultconfig.exhibitor.erb"
+  action :nothing
+end
+
 template "/etc/init/exhibitor.conf" do
     cookbook "zookeeper-component"
     source "exhibitor.upstart.conf.erb"
