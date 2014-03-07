@@ -1,5 +1,5 @@
 kit:
-  name: "Component Zookeeper Dev"
+  name: "Zookeeper"
   link: https://github.com/qubell-bazaar/component-zookeeper-dev 
   applications:
     - name: "Zookeeper"
