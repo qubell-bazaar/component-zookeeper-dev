@@ -55,3 +55,4 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
 
     unittest.main(argv=["qubell-test-runner", "discover", "--pattern=test*.py", "-v"])
+
