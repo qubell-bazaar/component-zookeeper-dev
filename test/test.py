@@ -27,8 +27,9 @@ class ComponentTestCase(BaseComponentTestCase):
    }]
     
     @instance(byApplication=name)
-    def test_solr_search(self, instance):
-        host = instance.returnValues['output.zoo-ui'][0]
+    def test_zoo_ui(self, instance):
+        hosts = instance.returnValues['output.zoo-ui']
+        for host in hosts:
         resp = requests.get(host, verify=False)
 
         assert resp.status_code == 200
