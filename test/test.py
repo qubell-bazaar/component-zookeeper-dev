@@ -30,7 +30,6 @@ class ComponentTestCase(BaseComponentTestCase):
     def test_zoo_ui(self, instance):
         hosts = instance.returnValues['output.zoo-ui']
         for host in hosts:
-        resp = requests.get(host, verify=False)
-
-        assert resp.status_code == 200
+           resp = requests.get(host, verify=False)
+           assert resp.status_code == 200
 
