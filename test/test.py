@@ -61,8 +61,7 @@ class TomcatDevComponentTestCase(BaseComponentTestCase):
 
     @instance(byApplication=name)
     def test_zookeeper_ui(self, instance):
-        urls = instance.returnValues['output.zoo-ui']
-        for url in urls:
+        url = instance.returnValues['output.zoo-ui'][0]
         resp = requests.get(url, verify=False)
 
         assert resp.status_code == 200
