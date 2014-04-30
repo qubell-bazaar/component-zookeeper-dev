@@ -1,4 +1,4 @@
-name "zookeeper_component_test"
+name "cookbook-qubell-zookeeper_test"
 version "0.1.0"
 
 depends "cookbook-qubell-zookeeper"
