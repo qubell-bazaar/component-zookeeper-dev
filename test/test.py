@@ -1,7 +1,7 @@
 import os
 import requests
 
-from test_runner import BaseComponentTestCase
+from test_runner import Basecomponenttestcase
 from qubell.api.private.testing import instance, environment, workflow, values
 
 @environment({
@@ -11,6 +11,17 @@ from qubell.api.private.testing import instance, environment, workflow, values
             "action": "provisionVms",
             "parameter": "imageId",
             "value": "us-east-1/ami-eb6b0182"
+        }, {
+            "action": "provisionVms",
+            "parameter": "vmIdentity",
+            "value": "root"
+        }]
+    },
+    "AmazonEC2_CentOS_53": {
+        "policies": [{
+            "action": "provisionVms",
+            "parameter": "imageId",
+            "value": "us-east-1/ami-beda31d7"
         }, {
             "action": "provisionVms",
             "parameter": "vmIdentity",
@@ -41,17 +52,18 @@ from qubell.api.private.testing import instance, environment, workflow, values
     }
 })
 class TomcatDevComponentTestCase(BaseComponentTestCase):
-    name = "component-tomcat-dev"
+    name = "component-zookeeper-dev"
     apps = [{
         "name": name,
         "file": os.path.realpath(os.path.join(os.path.dirname(__file__), '../%s.yml' % name))
     }]
 
-     @instance(byApplication=name)
-     def test_zookeeper_ui(self, instance):
+
+    @instance(byApplication=name)
+    def test_zookeeper_ui(self, instance):
         urls = instance.returnValues['output.zoo-ui']
         for url in urls:
         resp = requests.get(url, verify=False)
 
-        assert resp.status_code == 200    
+        assert resp.status_code == 200
 
