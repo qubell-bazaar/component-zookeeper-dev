@@ -10,7 +10,7 @@ from qubell.api.private.testing import instance, environment, workflow, values
         "policies": [{
             "action": "provisionVms",
             "parameter": "imageId",
-            "value": "us-east-1/ami-d0f89fb9"
+            "value": "us-east-1/ami-967edcff`"
         }, {
             "action": "provisionVms",
             "parameter": "vmIdentity",
