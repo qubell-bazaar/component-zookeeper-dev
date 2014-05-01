@@ -6,34 +6,11 @@ from qubell.api.private.testing import instance, environment, workflow, values
 
 
 @environment({
-    "default": {},
-    "AmazonEC2_CentOS_63": {
-        "policies": [{
-            "action": "provisionVms",
-            "parameter": "imageId",
-            "value": "us-east-1/ami-eb6b0182"
-        }, {
-            "action": "provisionVms",
-            "parameter": "vmIdentity",
-            "value": "root"
-        }]
-    },
     "AmazonEC2_Ubuntu_1204": {
         "policies": [{
             "action": "provisionVms",
             "parameter": "imageId",
             "value": "us-east-1/ami-d0f89fb9"
-        }, {
-            "action": "provisionVms",
-            "parameter": "vmIdentity",
-            "value": "ubuntu"
-        }]
-    },
-    "AmazonEC2_Ubuntu_1004": {
-        "policies": [{
-            "action": "provisionVms",
-            "parameter": "imageId",
-            "value": "us-east-1/ami-0fac7566"
         }, {
             "action": "provisionVms",
             "parameter": "vmIdentity",
