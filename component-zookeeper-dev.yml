@@ -16,24 +16,8 @@ application:
       zoo-hosts: "bind(zookeeper#result.zookeeper-hosts)"
       zoo-ui: "bind(zookeeper#result.zookeeper-ui)"
 
-  bindings:
-    - [zookeeper, wfService]
-    - [zookeeper, secureStore]
-
+ 
   components:
-    wfService:
-      type: reference.Service
-      interfaces:
-        executor:
-          execute-workflow: receive-command(object request => object status => object status)
-          execute-command: send-command(string interface, string command, map<string, object> arguments => map<string, object> response => map<string, object> response)
-
-    secureStore:
-      type: reference.Service
-      interfaces:
-        keypair-store:
-          get-keypair: receive-command(string id => object privateKey)
-
     zookeeper:
       type: workflow.Instance
       interfaces:
@@ -47,12 +31,6 @@ application:
           zookeeper-hosts: publish-signal(list<string>)
           zookeeper-ui: publish-signal(list<string>)
           zookeeper-nodes: publish-signal(list<string>)
-
-        keypair-store: 
-          get-keypair: send-command(string id => object privateKey)
-
-      required: [keypair-store]
-
       configuration:
         configuration.workflows:
           launch:
@@ -80,8 +58,8 @@ application:
                     jcloudsNodeNamePrefix: component
                     jcloudsIdentity: "{$.identity}"
                     jcloudsCredential: "{$.credential}"
-                    vmIdentity: ubuntu
-                    imageId: us-east-1/ami-0fac7566
+                    vmIdentity: ec2-user
+                    imageId: us-east-1/ami-1ba18d72
                     ec2SecurityGroup: default
                   output:
                     zoo-hosts: ips
@@ -93,8 +71,8 @@ application:
                   parameters:
                     isSolo: true
                     roles: [ default ]
-                    runList: [ "recipe[zookeeper-component]" ]
-                    recipeUrl: "https://dl.dropboxusercontent.com/u/250836/zoo-cloud.tar.gz"
+                    runList: [ "recipe[cookbook-qubell-zookeeper]" ]
+                    recipeUrl: "https://s3.amazonaws.com/qubell-zookeeper-artifacts/loky9000/component-zookeeper-dev-cookbooks-stable-17cf0bd.tar.gz" 
                     jattrs:
                       exhibitor:
                         opts:
