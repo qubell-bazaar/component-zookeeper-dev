@@ -41,6 +41,10 @@ class BaseComponentTestCase(BaseTestCase):
     platform = platform
     parameters = parameters
     apps = []
+    
+    @classmethod
+    def timeout(cls):
+        return 60
 
     @classmethod
     def environment(cls, organization):
