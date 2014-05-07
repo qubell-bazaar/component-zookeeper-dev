@@ -1,4 +1,4 @@
-zookeeper
+ZooKeeper
 =========
 
 ![](http://zookeeper.apache.org/images/zookeeper_small.gif)
