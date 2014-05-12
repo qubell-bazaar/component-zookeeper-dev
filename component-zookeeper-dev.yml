@@ -72,7 +72,7 @@ application:
                     isSolo: true
                     roles: [ default ]
                     runList: [ "recipe[cookbook-qubell-zookeeper]" ]
-                    recipeUrl: "https://s3.amazonaws.com/qubell-zookeeper-artifacts/loky9000/component-zookeeper-dev-cookbooks-stable-17cf0bd.tar.gz" 
+                    recipeUrl: "https://s3.amazonaws.com/qubell-zookeeper-artifacts/loky9000/component-zookeeper-dev-cookbooks-stable-d9c5966.tar.gz" 
                     jattrs:
                       exhibitor:
                         opts:
