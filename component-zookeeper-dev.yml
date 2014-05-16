@@ -72,7 +72,7 @@ application:
                     isSolo: true
                     roles: [ default ]
                     runList: [ "recipe[cookbook-qubell-zookeeper]" ]
-                    recipeUrl: "https://s3.amazonaws.com/qubell-zookeeper-artifacts/loky9000/component-zookeeper-dev-cookbooks-stable-d9c5966.tar.gz" 
+                    recipeUrl: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-d9c5966.tar.gz" 
                     jattrs:
                       exhibitor:
                         opts:
@@ -80,6 +80,7 @@ application:
                         defaultconfig:
                           client_port: "{$.zookeeper-cli-port}"
                           election_port: "{$.zookeeper-elect-port}"
+                          auto_manage_instances_settling_period_ms: 1000
                       zookeeper:
                         hosts: "{$.zoo-hosts-privatIp}"
             return:
