@@ -1,0 +1,31 @@
+language: ruby
+rvm:
+- 1.9.3
+gemfile:
+- Gemfile
+env:
+  global:
+  - ARTIFACTS_AWS_REGION=us-east-1
+  - ARTIFACTS_S3_BUCKET=qubell-zookeeper-artifacts
+  - QUBELL_TENANT=https://staging.dev.qubell.com
+  - PROVIDER_TYPE=aws-ec2
+  - PROVIDER_REGION=us-east-1
+  - GIT_NAME=loky9000
+  - GIT_EMAIL=aivantsov@qubell.com
+  - secure: Li3M5UZlqt/2nNMB1ij5Oh65Dhk4UupUd5uRD4k+4X1AXXo0EnL2CDDJuoxMTbWBUv0tpaFbwXZNclp/ceJahd1oWInQUasIeFf8aPdP/hGZPkH3n5wDTPljEybeyXCp//vv0POzV3WRRxmL6qm6tVFzgIex9wRVTltwgS8B1Cg=
+  - secure: Fz/enDhTxiV8aNlK+7N5OWXVUMoZU0/tSnLtuFRFZTYtie7VH1Fa22rZpjNqZMd5fCO7sgL4MzLYhZQ+17BI4W+Ve8fQQI7QKsZAqyWAQACuhGrcNq0XHLRxBJ8w2QRGfvepZntRdXx6kE0ijTjGaqxJVeWfMAYZjD0/zGDg9F4=
+  - secure: RwDBoey8S+HDIKAtwcqq/79lZeNIvT+Mi+vW+gTmO9p/Q9cUQrOX9E+luGStRI4qjwOYMqDYSUNFEZ0OCG008GLhaN94SwYVKKaED7fsrLYTW257/t4piM5v3UtkSgOX/v4HmJ3dz6fQqRHOAIMVgsEU9YWr60bz3wRCrqm8CAs=
+  - secure: ToQwOztfNooa8Z/wKUiohUnTEtRyzFqWDfCvbNJx4gIjJIH/Zqade6BW29lnjvr8tchCmX/c8BAkTwbrFAj0MIwUbL7kSlv4y9PpmAyTol8NDt7y/ybedGO2jEXpCXdBY+zguc5sg7Ki9ZtCs/wNjB4BlWr4GBnytst6ufHojH8=
+  - secure: bkn0pr9//al5TnzsUB4eE/Fu0x+v017WAzdC0AB/KrpLdnmgAmszEVxWyFxnLtz4zGSEbKhrr09szAsks/+9WkbEblmbvM/tp5W/x6432YZTIwaUCyHeBTe7iwIwcCLkk0SEp36ITMf91LvzlE/Iw3rORkgh4LAkJ9e53Asrj6M=
+  - secure: DM4X6DvqAU9+xD94p1VPo9ifJ+UTaXEz9oIb9PLudoqCBTvA17xrmM9dmkaW3Qkun/X1KrCgACPvukffH8mUj+Mvept2Uuru71j5bFE7hghAMCh1aWDpwHTJcjuJ1fLpwr+tb8tA6ZBkLu2hOopyw979yv1mYl1qQj1/b3pwqaE=
+  - secure: K2gt2zh8Qqvn4fUjbOmtOgFZto8qgfVRBXfbhhR/dRSszwmcOIOjSIoudv3hs5ewyEjtWysWxgVHmhIMKd+asjb890O93MC4W8xJcHqTZtdz9K9tY1jCrMzB0Xr03kBHMzlr+ebRQDnSfNH8KtQvtwW07emw4fUv24/EVSLTDgU=
+  - secure: dYKcfERG4NaP9tda9NxuhJt3HCUeWwzfJ0XhpVUO0Eomng7HTPsX/iecTyylgt99bt2XV9Mrmoi4egsH1bcpmtI3T41Qijl1ABGkVZHt9DMZMNLwgGizemEyv7Bs5NC0ObNt2hjctsyIGc7sHKYICQUPO4WkyiJcFGdf/+Smk04=
+install:
+- sudo apt-get -y -q install python-pip
+- sudo pip install -r test/requirements.txt
+before_script:
+- gem install --version 2.0.15 berkshelf --no-ri --no-rdoc
+- gem install --version 0.8.9 faraday --no-ri --no-rdoc
+- gem install travis-artifacts --no-ri --no-rdoc
+- git submodule update --init --recursive
+script: ./build.sh
