@@ -6,20 +6,17 @@ gemfile:
 env:
   global:
   - ARTIFACTS_AWS_REGION=us-east-1
-  - ARTIFACTS_S3_BUCKET=qubell-zookeeper-artifacts
-  - QUBELL_TENANT=https://staging.dev.qubell.com
+  - ARTIFACTS_S3_BUCKET=qubell-starter-kit-artifacts
+  - QUBELL_TENANT=https://expresss.qubell.com
   - PROVIDER_TYPE=aws-ec2
   - PROVIDER_REGION=us-east-1
-  - GIT_NAME=loky9000
-  - GIT_EMAIL=aivantsov@qubell.com
-  - secure: Li3M5UZlqt/2nNMB1ij5Oh65Dhk4UupUd5uRD4k+4X1AXXo0EnL2CDDJuoxMTbWBUv0tpaFbwXZNclp/ceJahd1oWInQUasIeFf8aPdP/hGZPkH3n5wDTPljEybeyXCp//vv0POzV3WRRxmL6qm6tVFzgIex9wRVTltwgS8B1Cg=
-  - secure: Fz/enDhTxiV8aNlK+7N5OWXVUMoZU0/tSnLtuFRFZTYtie7VH1Fa22rZpjNqZMd5fCO7sgL4MzLYhZQ+17BI4W+Ve8fQQI7QKsZAqyWAQACuhGrcNq0XHLRxBJ8w2QRGfvepZntRdXx6kE0ijTjGaqxJVeWfMAYZjD0/zGDg9F4=
-  - secure: RwDBoey8S+HDIKAtwcqq/79lZeNIvT+Mi+vW+gTmO9p/Q9cUQrOX9E+luGStRI4qjwOYMqDYSUNFEZ0OCG008GLhaN94SwYVKKaED7fsrLYTW257/t4piM5v3UtkSgOX/v4HmJ3dz6fQqRHOAIMVgsEU9YWr60bz3wRCrqm8CAs=
-  - secure: ToQwOztfNooa8Z/wKUiohUnTEtRyzFqWDfCvbNJx4gIjJIH/Zqade6BW29lnjvr8tchCmX/c8BAkTwbrFAj0MIwUbL7kSlv4y9PpmAyTol8NDt7y/ybedGO2jEXpCXdBY+zguc5sg7Ki9ZtCs/wNjB4BlWr4GBnytst6ufHojH8=
-  - secure: bkn0pr9//al5TnzsUB4eE/Fu0x+v017WAzdC0AB/KrpLdnmgAmszEVxWyFxnLtz4zGSEbKhrr09szAsks/+9WkbEblmbvM/tp5W/x6432YZTIwaUCyHeBTe7iwIwcCLkk0SEp36ITMf91LvzlE/Iw3rORkgh4LAkJ9e53Asrj6M=
-  - secure: DM4X6DvqAU9+xD94p1VPo9ifJ+UTaXEz9oIb9PLudoqCBTvA17xrmM9dmkaW3Qkun/X1KrCgACPvukffH8mUj+Mvept2Uuru71j5bFE7hghAMCh1aWDpwHTJcjuJ1fLpwr+tb8tA6ZBkLu2hOopyw979yv1mYl1qQj1/b3pwqaE=
-  - secure: K2gt2zh8Qqvn4fUjbOmtOgFZto8qgfVRBXfbhhR/dRSszwmcOIOjSIoudv3hs5ewyEjtWysWxgVHmhIMKd+asjb890O93MC4W8xJcHqTZtdz9K9tY1jCrMzB0Xr03kBHMzlr+ebRQDnSfNH8KtQvtwW07emw4fUv24/EVSLTDgU=
-  - secure: dYKcfERG4NaP9tda9NxuhJt3HCUeWwzfJ0XhpVUO0Eomng7HTPsX/iecTyylgt99bt2XV9Mrmoi4egsH1bcpmtI3T41Qijl1ABGkVZHt9DMZMNLwgGizemEyv7Bs5NC0ObNt2hjctsyIGc7sHKYICQUPO4WkyiJcFGdf/+Smk04=
+  - secure: WxKgJfvOle9DJUh1a3pu0fFbSeL9J+G3fcWvVIwc5yiwta4LgtVotmFmQpQVw3qg8UYLANm7N/jwuxUFXD3uf5d2TQJZzYUFsVJavsXiVA571Ea/WMyCE1Rp8k05aZ8ovqULBrYiLkcCVmh1/yO/90H3xVEtzoBjAZHOPZwuMYU=
+  - secure: aJ1FpMdr2VknML9qC3nwtZrqyur35uZ4DlPM1/1dLX3PhxCoKCnINxx/epQeAUnozcv/ZvTipAgEUipJhZjN5kXkGKg40FkffDzYTzLyluCmTxf+t+BJ/eR0v1m1y9rOVFQSkQn5DkmuPxurkQeYlAHGxP+oFDyw99EX76oXqcs=
+  - secure: Ey69/ySFn3lL/CQ3WgTW6s5dkfdspulFpGgL3xvaM7IINpkKUiJGUv6ixTdMvomuiI/OQ6FOne4te1R9JoJTBlfoKxYqU9A/YLME6z6TobVmug0Vf2VWLrJJqsMQihBwHwRI7GqWyA5n+vMO8NCN5676Ui2Qh+81vx54GWj0W9w=
+  - secure: t5UXnBIBnrPOR5wvjbrYUZZdMY3o5NzincnEGlFwKvVQuBPpMQIi/eqADI2cyDZWlGOCrGdsOq3EAkw8jRoanxB2v7gY+vw/+XnwSM6I5EqISSO3+1U9iGk1WIESUJOFFrFiLroLlFPuoSTJJR9/dt95VQA5Sh0S4FdHq+yMyNk=
+  - secure: NzGBpXTAWcnlJwK3w/6XjIFXD3usjHafskl5JOE+2/0MZ0ECAsEawzYrmUPlbwZ1y6EoMiR505yy2niKO660Z5tIg90Y7wvhUI639nuibub4I9ENFGeUZ2W/MZcC5V4ZHxft7GdPhRFIVp8uTnX7nTL2ISRE1XCPNkTeMV4gtS0=
+  - secure: B/SgQELCXMt2GOryKV6NZrzQMVVnOBhyNIkBVfIiGDFt6Hl83xLCvn7fAPDjUKjGWUYPJpp7vjOTQnDzQuGaIGAMu2JWYMoezeBQjHbdhleR7Jv0sRne6XKn826wuFt7boTmDYJDTJ+eFLurrscX5xqatPLw923gXn3WNGODIA0=
+  - secure: F6TNu7WwlNM1VCSUxcvEfNjWEl3i/Tmst1HZoMmgEJgLNI4S003PFXyPPtO+1btMIDay0KDrOHaX/XtqMGgGQeAGkIExdA2e4TEF6QgXFT9t6WuNzD8xZ6xlN6f2pDE8/LHaiEbd8IjGzrSW82Mk4CNiSZbbkeiq311G92xm7fs=
 install:
 - sudo apt-get -y -q install python-pip
 - sudo pip install -r test/requirements.txt
