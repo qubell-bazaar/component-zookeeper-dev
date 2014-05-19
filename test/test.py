@@ -41,7 +41,7 @@ from qubell.api.private.testing import instance, environment, workflow, values
         }]
     }
 })
-class ComponentTestCase(BaseComponentTestCase):
+class ZookeeperDevTestCase(BaseComponentTestCase):
     name = "component-zookeeper-dev"
     apps = [{
         "name": name,
