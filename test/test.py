@@ -47,7 +47,9 @@ class ZookeeperDevTestCase(BaseComponentTestCase):
         "name": name,
         "file": os.path.realpath(os.path.join(os.path.dirname(__file__), '../%s.yml' % name))
    }]
-    
+    @classmethod
+    def timeout(cls):
+        return 20    
     @instance(byApplication=name)
     def test_zoo_ui(self, instance):
         hosts = instance.returnValues['output.zoo-ui']
