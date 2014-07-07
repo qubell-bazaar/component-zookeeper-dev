@@ -14,7 +14,7 @@ Features
 
 Configurations
 --------------
-[![Build Status](https://travis-ci.org/qubell-bazaar/component-zookeeper-dev.png?branch=master)](https://travis-ci.org/qubell-bazaar/component-zookeeper-dev)
+[![Build Status](http://jenkins.dev.qubell.com:8080/buildStatus/icon?job=component-zookeeper-upstream)](http://jenkins.dev.qubell.com:8080/job/component-zookeeper-dev/)
 
  - ZooKeeper 3.4.5 (latest), Amazon Linux (us-east-1/ami-1ba18d72), AWS EC2 m1.small, ec2-user
  - ZooKeeper 3.4.5 (latest), CentOS 6.4 (us-east-1/ami-eb6b0182), AWS EC2 m1.small, root
