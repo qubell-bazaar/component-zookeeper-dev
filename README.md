@@ -14,8 +14,6 @@ Features
 
 Configurations
 --------------
-[![Build Status](http://jenkins.dev.qubell.com:8080/buildStatus/icon?job=component-zookeeper-upstream)](http://jenkins.dev.qubell.com:8080/job/component-zookeeper-dev/)
-
  - ZooKeeper 3.4.5 (latest), Amazon Linux (us-east-1/ami-1ba18d72), AWS EC2 m1.small, ec2-user
  - ZooKeeper 3.4.5 (latest), CentOS 6.4 (us-east-1/ami-eb6b0182), AWS EC2 m1.small, root
  - ZooKeeper 3.4.5 (latest), Ubuntu 12.04 (us-east-1/ami-d0f89fb9), AWS EC2 m1.small, ubuntu
