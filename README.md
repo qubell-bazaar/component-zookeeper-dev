@@ -5,7 +5,7 @@ zookeeper
 
 Installs and configures Apache ZooKeeper.
 
-[![Install](https://raw.github.com/qubell-bazaar/component-skeleton/master/img/install.png)](https://express.qubell.com/applications/upload?metadataUrl=https://github.com/qubell-bazaar/component-zookeeper/raw/master/meta.yml)
+[![Install](https://raw.github.com/qubell-bazaar/component-skeleton/master/img/install.png)](https://express.qubell.com/applications/upload?metadataUrl=https://github.com/qubell-bazaar/component-zookeeper-dev/raw/master/meta.yml)
 
 Features
 --------
