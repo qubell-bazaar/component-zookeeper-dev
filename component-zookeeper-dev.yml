@@ -1,17 +1,23 @@
 application:
   configuration:
+    input.operation-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user}
     input.zookeeper-quantity: "3"
     input.zookeeper-cli-port: "2181"
     input.zookeeper-elect-port: "3888"
     input.exhibitor-port: "8090"
+    input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-8fa5471.tar.gz"
+    input.instance-size: "m1.small"
 
   interfaces:
     input:
       zookeeper-quantity: "bind(zookeeper#input.zookeeper-quantity)"
+      operation-system: "bind(zookeeper#input.operation-system)"
       zookeeper-cli-port: "bind(zookeeper#input.zookeeper-cli-port)"
       zookeeper-elect-port: "bind(zookeeper#input.zookeeper-elect-port)"
       exhibitor-port: "bind(zookeeper#input.exhibitor-port)"
-    output:
+      instance-size: "bind(zookeeper#input.instance-size)"
+      recipe-url: "bind(zookeeper#input.recipe-url)"
+    zoo:
       zoo-nodes: "bind(zookeeper#result.zookeeper-nodes)"
       zoo-hosts: "bind(zookeeper#result.zookeeper-hosts)"
       zoo-ui: "bind(zookeeper#result.zookeeper-ui)"
@@ -22,45 +28,46 @@ application:
       type: workflow.Instance
       interfaces:
         input:
-          zookeeper-quantity: configuration(string)
-          zookeeper-cli-port: configuration(string)
-          zookeeper-elect-port: configuration(string)
-          exhibitor-port: configuration(string)
+          operation-system:
+             type: configuration(map<string,object>)
+             suggestions:
+                 "centos": {image: "us-east-1/ami-bf5021d6", identity: root}
+                 "amazon": {image: "us-east-1/ami-1ba18d72", identity: ec2-user}
+                 "ubuntu1204": {image: "us-east-1/ami-967edcff", identity: ubuntu}
+                 "ubuntu1004": {image: "us-east-1/ami-9f3906f6", identity: ubuntu}
+          instance-size:
+             type: configuration(string)
+          recipe-url:
+             type: configuration(string)
+          zookeeper-quantity:
+             type: configuration(string)
+          zookeeper-cli-port:
+             type: configuration(string)
+          zookeeper-elect-port:
+             type: configuration(string)
+          exhibitor-port:
+             type: configuration(string)
         actions: {}
         result:
-          zookeeper-hosts: publish-signal(list<string>)
-          zookeeper-ui: publish-signal(list<string>)
-          zookeeper-nodes: publish-signal(list<string>)
+          zookeeper-hosts:
+             type: publish-signal(list<string>)
+          zookeeper-ui:
+             type: publish-signal(list<string>)
+          zookeeper-nodes:
+             type: publish-signal(list<string>)
       configuration:
         configuration.workflows:
           launch:
-            parameters:
-              - zookeeper-quantity:
-                  description: Number of servers
-              - zookeeper-cli-port:
-                  description: Zookeeper port for connections
-              - zookeeper-elect-port:
-                  description: Zookeeper port for elections
-              - exhibitor-port:
-                  description: Zookeeper management UI port
             steps:
               - provision:
                   action: provisionAmazonVm
                   phase: provision
                   parameters:
                     roleName: default
-                    hardwareId: m1.small
+                    hardwareId: "{$.instance-size}"
                     targetQuantity: "{$.zookeeper-quantity}"
-                    retryCount: 1
-                    jcloudsProvider: aws-ec2
-                    jcloudsEndpoint: https://ec2.us-east-1.amazonaws.com
-                    jcloudsRegions: us-east-1
-                    jcloudsNodeNamePrefix: component
-                    jcloudsIdentity: "{$.identity}"
-                    jcloudsCredential: "{$.credential}"
-                    vmIdentity: ec2-user
-                    imageId: us-east-1/ami-1ba18d72
-                    ec2SecurityGroup: default
+                    vmIdentity: "{$.operation-system.identity}"
+                    imageId: "{$.operation-system.image}"
                   output:
                     zoo-hosts: ips
                     zoo-hosts-privatIp: privateips
@@ -72,7 +79,7 @@ application:
                     isSolo: true
                     roles: [ default ]
                     runList: [ "recipe[cookbook-qubell-zookeeper]" ]
-                    recipeUrl: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-8fa5471.tar.gz" 
+                    recipeUrl: "{$.recipe-url}"
                     jattrs:
                       exhibitor:
                         opts:
@@ -82,6 +89,7 @@ application:
                           election_port: "{$.zookeeper-elect-port}"
                           auto_manage_instances_settling_period_ms: 1000
                       zookeeper:
+                        mirror: "http://pkgs.fedoraproject.org/repo/pkgs/zookeeper/zookeeper-3.4.5.tar.gz/f64fef86c0bf2e5e0484d19425b22dcb/zookeeper-3.4.5.tar.gz"
                         hosts: "{$.zoo-hosts-privatIp}"
             return:
               zookeeper-hosts:

@@ -52,7 +52,7 @@ class ZookeeperDevTestCase(BaseComponentTestCase):
         return 20    
     @instance(byApplication=name)
     def test_zoo_ui(self, instance):
-        hosts = instance.returnValues['output.zoo-ui']
+        hosts = instance.returnValues['zoo.zoo-ui']
         for host in hosts:
            resp = requests.get(host, verify=False)
            assert resp.status_code == 200
