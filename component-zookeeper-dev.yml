@@ -3,9 +3,9 @@ application:
   configuration:
     input.operation-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user} ### used image/identity pair for describing Operating system for the instance.
     input.zookeeper-quantity: "3" ### Zookkeper hosts quantity
-    input.zookeeper-cli-port: "2181" #### Port for client connections
-    input.zookeeper-elect-port: "3888" ### Port for server connections during the leader election phase
-    input.exhibitor-port: "8090" ### Exhibitor ui port
+    input.zookeeper-cli-port: 2181 #### Port for client connections
+    input.zookeeper-elect-port: 3888 ### Port for server connections during the leader election phase
+    input.exhibitor-port: 8090 ### Exhibitor ui port
     input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-7450e88.tar.gz" ### Cookbooks Url
     input.instance-size: "m1.small" ### Instance size
 
@@ -48,13 +48,13 @@ application:
              type: configuration(string)
              name: Zookkeper hosts quantity
           zookeeper-cli-port:
-             type: configuration(string)
+             type: configuration(int)
              name: Client port
           zookeeper-elect-port:
-             type: configuration(string)
+             type: configuration(int)
              name: Election port
           exhibitor-port:
-             type: configuration(string)
+             type: configuration(int)
              name: UI port
         actions: {}
         result:
