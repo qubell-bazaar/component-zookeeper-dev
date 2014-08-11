@@ -1,15 +1,18 @@
+#### Zookeeper cluster ####
 application:
   configuration:
-    input.operation-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user}
-    input.zookeeper-quantity: "3"
-    input.zookeeper-cli-port: "2181"
-    input.zookeeper-elect-port: "3888"
-    input.exhibitor-port: "8090"
-    input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-cb288bc.tar.gz"
-    input.instance-size: "m1.small"
+    input.operation-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user} ### used image/identity pair for describing Operating system for the instance.
+    input.zookeeper-quantity: "3" ### Zookkeper hosts quantity
+    input.zookeeper-cli-port: "2181" #### Port for client connections
+    input.zookeeper-elect-port: "3888" ### Port for server connections during the leader election phase
+    input.exhibitor-port: "8090" ### Exhibitor ui port
+    input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-cb288bc.tar.gz" ### Cookbooks Url
+    input.instance-size: "m1.small" ### Instance size
+
+####### Root Application Interfaces. Here we describe a interfaces with pins  and their bindings on  components interfaces
 
   interfaces:
-    input:
+    input: ###Input values we want to manage from the root application
       zookeeper-quantity: "bind(zookeeper#input.zookeeper-quantity)"
       operation-system: "bind(zookeeper#input.operation-system)"
       zookeeper-cli-port: "bind(zookeeper#input.zookeeper-cli-port)"
@@ -17,7 +20,7 @@ application:
       exhibitor-port: "bind(zookeeper#input.exhibitor-port)"
       instance-size: "bind(zookeeper#input.instance-size)"
       recipe-url: "bind(zookeeper#input.recipe-url)"
-    zoo:
+    zoo: ### combined interface for actions/output pins
       zoo-nodes: "bind(zookeeper#result.zookeeper-nodes)"
       zoo-hosts: "bind(zookeeper#result.zookeeper-hosts)"
       zoo-ui: "bind(zookeeper#result.zookeeper-ui)"
@@ -30,36 +33,45 @@ application:
         input:
           operation-system:
              type: configuration(map<string,object>)
-             suggestions:
+             suggestions:  ### Create dropdown menu  in advanced launch
                  "centos": {image: "us-east-1/ami-bf5021d6", identity: root}
                  "amazon": {image: "us-east-1/ami-1ba18d72", identity: ec2-user}
                  "ubuntu1204": {image: "us-east-1/ami-967edcff", identity: ubuntu}
                  "ubuntu1004": {image: "us-east-1/ami-9f3906f6", identity: ubuntu}
           instance-size:
              type: configuration(string)
+             name: VM size m1.small for example
           recipe-url:
              type: configuration(string)
+             name: Cookbooks  url
           zookeeper-quantity:
              type: configuration(string)
+             name: Zookkeper hosts quantity
           zookeeper-cli-port:
              type: configuration(string)
+             name: Client port
           zookeeper-elect-port:
              type: configuration(string)
+             name: Election port
           exhibitor-port:
              type: configuration(string)
+             name: UI port
         actions: {}
         result:
           zookeeper-hosts:
              type: publish-signal(list<string>)
+             name: Zoo hosts Public IPs
           zookeeper-ui:
              type: publish-signal(list<string>)
+             name: Exhibitiors UI Urls
           zookeeper-nodes:
              type: publish-signal(list<string>)
+             name: Zoo hosts Private IPs
       configuration:
         configuration.workflows:
-          launch:
+          launch: ### main workflow used for provision/install phase
             steps:
-              - provision:
+              - provision: ### Action "provisionAmazonVm" provision vm on Amazon EC2 and return  ips list
                   action: provisionAmazonVm
                   phase: provision
                   parameters:
@@ -71,7 +83,7 @@ application:
                   output:
                     zoo-hosts: ips
                     zoo-hosts-privatIp: privateips
-              - deploy-zoo:
+              - deploy-zoo: ### Action "chefrun" downloads cookbooks archive by specified recipeUrl and run recipe descrbed in runList with provided attributes
                   action: "chefrun"
                   phase: deploy-zoo
                   precedingPhases: [ provision ]
@@ -91,7 +103,7 @@ application:
                       zookeeper:
                         mirror: "http://pkgs.fedoraproject.org/repo/pkgs/zookeeper/zookeeper-3.4.5.tar.gz/f64fef86c0bf2e5e0484d19425b22dcb/zookeeper-3.4.5.tar.gz"
                         hosts: "{$.zoo-hosts-privatIp}"
-            return:
+            return: ### This values we want to see on application dashboard
               zookeeper-hosts:
                 value: "{$.zoo-hosts}"
               zookeeper-ui:
@@ -99,7 +111,3 @@ application:
               zookeeper-nodes:
                 value: "{$.zoo-hosts-privatIp}"
 
-          destroy:
-            steps:
-              - destroy:
-                  action: undeployEnv
