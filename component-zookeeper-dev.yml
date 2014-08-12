@@ -1,19 +1,19 @@
-#### Zookeeper cluster ####
+#### Zookeeper Ensemble ####
 application:
   configuration:
-    input.operation-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user} ### used image/identity pair for describing Operating system for the instance.
+    input.operation-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user} ### image/identity pair for describing Operating system.
     input.zookeeper-quantity: "3" ### Zookkeper hosts quantity
     input.zookeeper-cli-port: 2181 #### Port for client connections
     input.zookeeper-elect-port: 3888 ### Port for server connections during the leader election phase
     input.exhibitor-port: 8090 ### Exhibitor ui port
-    input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-9f30bb8.tar.gz" ### Cookbooks Url
-    input.instance-size: "m1.small" ### Instance size
+    input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-9f30bb8.tar.gz" ### Chef cookbooks Url
+    input.instance-size: "m1.small" ###EC2  Instance type
 
 ####### Root Application Interfaces. Here we describe a interfaces with pins  and their bindings on  components interfaces
 
   interfaces:
     input: ###Input values we want to manage from the root application
-      zookeeper-quantity: "bind(zookeeper#input.zookeeper-quantity)"
+      zookeeper-quantity: "bind(zookeeper#input.zookeeper-quantity)"  ### Here we bind pin 'input.zookeeper-quantity' on pin 'input.zookeeper-quantity' in workflow 'zookeeper'
       operation-system: "bind(zookeeper#input.operation-system)"
       zookeeper-cli-port: "bind(zookeeper#input.zookeeper-cli-port)"
       zookeeper-elect-port: "bind(zookeeper#input.zookeeper-elect-port)"
@@ -25,14 +25,17 @@ application:
       zoo-hosts: "bind(zookeeper#result.zookeeper-hosts)"
       zoo-ui: "bind(zookeeper#result.zookeeper-ui)"
 
+
+####### Components definitions ########
  
   components:
+####  Single component zookeeper ####
     zookeeper:
       type: workflow.Instance
       interfaces:
-        input:
+        input: #### Contain pins with type: configuration()
           operation-system:
-             type: configuration(map<string,object>)
+             type: configuration(map<string,object>) ### For example we map <string> "centos" on object{image: "us-east-1/ami-bf5021d6", identity: "root"}
              suggestions:  ### Create dropdown menu  in advanced launch
                  "centos": {image: "us-east-1/ami-bf5021d6", identity: root}
                  "amazon": {image: "us-east-1/ami-1ba18d72", identity: ec2-user}
@@ -69,18 +72,18 @@ application:
              name: Zoo hosts Private IPs
       configuration:
         configuration.workflows:
-          launch: ### main workflow used for provision/install phase
+          launch: ### Launch workflow used for provision/install phase
             steps:
               - provision: ### Action "provisionAmazonVm" provision vm on Amazon EC2 and return  ips list
-                  action: provisionAmazonVm
+                  action: provisionVms
                   phase: provision
                   parameters:
                     roleName: default
                     hardwareId: "{$.instance-size}"
-                    targetQuantity: "{$.zookeeper-quantity}"
+                    quantity: "{$.zookeeper-quantity}"
                     vmIdentity: "{$.operation-system.identity}"
                     imageId: "{$.operation-system.image}"
-                  output:
+                  output: ### Step output values will be used in workflow return section below
                     zoo-hosts: ips
                     zoo-hosts-privatIp: privateips
               - deploy-zoo: ### Action "chefrun" downloads cookbooks archive by specified recipeUrl and run recipe descrbed in runList with provided attributes
@@ -103,7 +106,7 @@ application:
                       zookeeper:
                         mirror: "http://pkgs.fedoraproject.org/repo/pkgs/zookeeper/zookeeper-3.4.5.tar.gz/f64fef86c0bf2e5e0484d19425b22dcb/zookeeper-3.4.5.tar.gz"
                         hosts: "{$.zoo-hosts-privatIp}"
-            return: ### This values we want to see on application dashboard
+            return: ### Values returned from workflow
               zookeeper-hosts:
                 value: "{$.zoo-hosts}"
               zookeeper-ui:
