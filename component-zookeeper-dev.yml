@@ -1,7 +1,7 @@
 #### Zookeeper Ensemble ####
 application:
   configuration:
-    input.operation-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user} ### image/identity pair for describing Operating system.
+    input.operating-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user} ### image/identity pair for describing Operating system.
     input.zookeeper-quantity: 3 ### Zookkeper hosts quantity
     input.zookeeper-cli-port: 2181 #### Port for client connections
     input.zookeeper-elect-port: 3888 ### Port for server connections during the leader election phase
@@ -14,7 +14,7 @@ application:
   interfaces:
     input: ###Input values we want to manage from the root application
       zookeeper-quantity: "bind(zookeeper#input.zookeeper-quantity)"  ### Here we bind pin 'input.zookeeper-quantity' on pin 'input.zookeeper-quantity' in workflow 'zookeeper'
-      operation-system: "bind(zookeeper#input.operation-system)"
+      operating-system: "bind(zookeeper#input.operating-system)"
       zookeeper-cli-port: "bind(zookeeper#input.zookeeper-cli-port)"
       zookeeper-elect-port: "bind(zookeeper#input.zookeeper-elect-port)"
       exhibitor-port: "bind(zookeeper#input.exhibitor-port)"
@@ -34,7 +34,7 @@ application:
       type: workflow.Instance
       interfaces:
         input: #### Contain pins with type: configuration()
-          operation-system:
+          operating-system:
              type: configuration(map<string,object>) ### For example we map <string> "centos" on object{image: "us-east-1/ami-bf5021d6", identity: "root"}
              suggestions:  ### Create dropdown menu  in advanced launch
                  "centos": {image: "us-east-1/ami-bf5021d6", identity: root}
@@ -81,8 +81,8 @@ application:
                     roleName: default
                     hardwareId: "{$.instance-size}"
                     quantity: "{$.zookeeper-quantity}"
-                    vmIdentity: "{$.operation-system.identity}"
-                    imageId: "{$.operation-system.image}"
+                    vmIdentity: "{$.operating-system.identity}"
+                    imageId: "{$.operating-system.image}"
                   output: ### Step output values will be used in workflow return section below
                     zoo-hosts: ips
                     zoo-hosts-privatIp: privateips
