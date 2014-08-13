@@ -1,5 +1,8 @@
 #### Zookeeper Ensemble ####
 application:
+# Input Configuration parameters.
+# In this section you can set input configuration parameters which you
+# will be able to change later in reconfiguration
   configuration:
     input.operating-system: {image: "us-east-1/ami-1ba18d72", identity: ec2-user} ### image/identity pair for describing Operating system.
     input.zookeeper-quantity: 3 ### Zookkeper hosts quantity
@@ -9,10 +12,11 @@ application:
     input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-a5d5fbf.tar.gz" ### Chef cookbooks Url
     input.instance-size: "m1.small" ###EC2  Instance type
 
-####### Root Application Interfaces. Here we describe a interfaces with pins  and their bindings on  components interfaces
-
+# Root Application Interfaces.
+# Here we describe a interfaces with pins and their bindings on components interfaces
+# For binding using function bind(Component1#interface.pin, Component2#interface.pin)
   interfaces:
-    input: ###Input values we want to manage from the root application
+    input: #contain pins with type: configuration()
       zookeeper-quantity: "bind(zookeeper#input.zookeeper-quantity)"  ### Here we bind pin 'input.zookeeper-quantity' on pin 'input.zookeeper-quantity' in workflow 'zookeeper'
       operating-system: "bind(zookeeper#input.operating-system)"
       zookeeper-cli-port: "bind(zookeeper#input.zookeeper-cli-port)"
@@ -29,15 +33,15 @@ application:
 ####### Components definitions ########
  
   components:
-####  Single component zookeeper ####
+####  Component zookeeper ####
     zookeeper:
-      type: workflow.Instance
-      interfaces:
-        input: #### Contain pins with type: configuration()
+      type: workflow.Instance # It's a  component type  to run imperative workflow
+      interfaces: # Each component have interfaces wit pins
+        input: # Contain pins with type: configuration().
           operating-system:
-             type: configuration(map<string,object>) ### For example we map <string> "centos" on object{image: "us-east-1/ami-bf5021d6", identity: "root"}
+             type: configuration(map<string,object>) # It's a pin with  configuration type and value will be a map string on left side  object on right side
              suggestions:  ### Create dropdown menu  in advanced launch
-                 "centos": {image: "us-east-1/ami-bf5021d6", identity: root}
+                 "centos": {image: "us-east-1/ami-bf5021d6", identity: root} # Here string "centos" mapped on object {image: "us-east-1/ami-bf5021d6", identity: root} etc.
                  "amazon": {image: "us-east-1/ami-1ba18d72", identity: ec2-user}
                  "ubuntu1204": {image: "us-east-1/ami-967edcff", identity: ubuntu}
                  "ubuntu1004": {image: "us-east-1/ami-9f3906f6", identity: ubuntu}
@@ -92,6 +96,7 @@ application:
                   precedingPhases: [ provision ]
                   parameters:
                     isSolo: true
+                    retryCount: 3
                     roles: [ default ]
                     runList: [ "recipe[cookbook-qubell-zookeeper]" ]
                     recipeUrl: "{$.recipe-url}"
