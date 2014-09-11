@@ -4,7 +4,6 @@ import requests
 from test_runner import BaseComponentTestCase
 from qubell.api.private.testing import instance, environment, workflow, values
 
-
 @environment({
     "default": {},
     "AmazonEC2_CentOS_63": {
@@ -42,10 +41,10 @@ from qubell.api.private.testing import instance, environment, workflow, values
     }
 })
 class ZookeeperDevTestCase(BaseComponentTestCase):
-    name = "component-zookeeper-dev"
+    name = "Zookeeper"
+    meta = "https://raw.githubusercontent.com/qubell-bazaar/component-zookeeper-dev/master/meta.yml"
     apps = [{
         "name": name,
-        "file": os.path.realpath(os.path.join(os.path.dirname(__file__), '../%s.yml' % name))
    }]
     @classmethod
     def timeout(cls):
