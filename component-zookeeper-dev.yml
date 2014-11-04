@@ -24,6 +24,8 @@ application:
       exhibitor-port: "bind(zookeeper#input.exhibitor-port)"
       instance-size: "bind(zookeeper#input.instance-size)"
       recipe-url: "bind(zookeeper#input.recipe-url)"
+    app-meta:
+      application-pic: "bind(metadata#output.application-pic)"
     zoo: ### combined interface for actions/output pins
       zoo-nodes: "bind(zookeeper#result.zookeeper-nodes)"
       zoo-hosts: "bind(zookeeper#result.zookeeper-hosts)"
@@ -33,6 +35,19 @@ application:
 ####### Components definitions ########
  
   components:
+    metadata:
+      type: cobalt.common.Constants
+      interfaces:
+        output:
+          application-pic:
+            type: publish-signal(map<string, object>)
+            name: ""
+      configuration:
+        configuration.values:
+          output.application-pic:
+            large: "https://s3.amazonaws.com/qubell-images/zookeeper.gif"
+            small: "https://s3.amazonaws.com/qubell-images/zookeeper.gif"
+            small-height: 112
 ####  Component zookeeper ####
     zookeeper:
       type: workflow.Instance # It's a  component type  to run imperative workflow
@@ -50,10 +65,10 @@ application:
              name: EC2 instance type
           recipe-url:
              type: configuration(string)
-             name: Cookbooks  url
+             name: Chef cookbooks
           zookeeper-quantity:
              type: configuration(int)
-             name: Zookkeper hosts quantity
+             name: No. Zookeeper hosts
           zookeeper-cli-port:
              type: configuration(int)
              name: Client port
@@ -67,13 +82,13 @@ application:
         result:
           zookeeper-hosts:
              type: publish-signal(list<string>)
-             name: Zoo hosts Public IPs
-          zookeeper-ui:
-             type: publish-signal(list<string>)
-             name: Exhibitiors UI Urls
+             name: Zookeeper hosts
           zookeeper-nodes:
              type: publish-signal(list<string>)
-             name: Zoo hosts Private IPs
+             name: Zookeeper hosts (private)
+          zookeeper-ui:
+             type: publish-signal(list<string>)
+             name: Exhibitors UI
       configuration:
         configuration.workflows:
           launch: ### Launch workflow used for provision/install phase
