@@ -1,14 +1,14 @@
 Zookeeper
 =========
 
-Version 2.0.37p
+Version 2.1-38p
 -------------
 
 ![](http://zookeeper.apache.org/images/zookeeper_small.gif)
 
 Installs and configures Apache ZooKeeper.
 
-[![Install](https://raw.github.com/qubell-bazaar/component-skeleton/master/img/install.png)](https://express.qubell.com/applications/upload?metadataUrl=https://raw.github.com/qubell-bazaar/component-zookeeper-dev/2.0.37p/meta.yml)
+[![Install](https://raw.github.com/qubell-bazaar/component-skeleton/master/img/install.png)](https://express.qubell.com/applications/upload?metadataUrl=https://raw.github.com/qubell-bazaar/component-zookeeper-dev/2.1-38p/meta.yml)
 
 Features
 --------
