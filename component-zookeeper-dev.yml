@@ -1,4 +1,4 @@
-#### Zookeeper Ensemble #####
+##### Zookeeper Ensemble ######
 application:
 # Input Configuration parameters.
 # In this section you can set input configuration parameters which you
@@ -22,7 +22,7 @@ application:
       zookeeper-elect-port: "bind(zookeeper#input.zookeeper-elect-port)"
       exhibitor-port: "bind(zookeeper#input.exhibitor-port)"
       recipe-url: "bind(zookeeper#input.recipe-url)"
-      clusterSize: "bind(cluster_commander#input.clusterSize)"
+      clusterSize: "bind(cluster#configuration.quantity, zookeeper#input.clusterSize)"
     app-meta:
       application-pic: "bind(metadata#output.application-pic)"
     compute-config:
@@ -39,7 +39,6 @@ application:
       set-quantity: "bind(cluster#scale.set-quantity)"
 
   bindings:
-    - [cluster_commander, cluster]
     - [zookeeper, cluster.compute]
 ####### Components definitions ########
  
@@ -57,31 +56,6 @@ application:
             large: "https://s3.amazonaws.com/qubell-images/zookeeper.gif"
             small: "https://s3.amazonaws.com/qubell-images/zookeeper.gif"
             small-height: 112
-    cluster_commander:
-      type: workflow.Instance
-      interfaces:
-        input:
-          clusterSize: configuration(int)
-        scaler:
-          set-quantity: send-command(int quantity)
-      configuration:
-        configuration.triggers:
-          input.clusterSize: update
-        configuration.propagateStatus: [ update ]
-        configuration.workflows:
-          update: &update 
-            steps:
-              - scale:
-                  action: scaler.set-quantity
-                  parameters:
-                    quantity: "{$.clusterSize}"
-              - get-signals:
-                  action: getSignals
-                  parameters:
-                    multi: true
-                  output:
-                    signals: result
-          launch: *update          
 
     cluster:
       type: composite.Scaler
@@ -93,6 +67,8 @@ application:
       type: workflow.Instance # It's a  component type  to run imperative workflow
       interfaces: # Each component have interfaces wit pins
         input: # Contain pins with type: configuration().
+          clusterSize:
+             type: configuration(int)
           recipe-url:
              type: configuration(string)
              name: Cookbooks  url
@@ -124,8 +100,11 @@ application:
           zookeeper-urls:
              type: publish-signal(list<string>)
              name: Zookeper urls (private)
-      required: [compute]
       configuration:
+        configuration.triggers:
+          compute.networks: update
+          input.clusterSize: update
+        configuration.propagateStatus: [update]
         configuration.workflows:
           update: &update  ### Launch workflow used for provision/install phase
             steps:
@@ -133,9 +112,9 @@ application:
                    action: waitPeers
                    parameters:
                      interfaces:
-                       compute: 3
+                       compute:  "{$.clusterSize}"
                      timeout:
-                       10 minute
+                       20 minute
               - get-signals:
                    action: getSignals
                    precedingPhases: [waitPeers]
@@ -164,6 +143,22 @@ application:
                       zookeeper:
                         mirror: "http://pkgs.fedoraproject.org/repo/pkgs/zookeeper/zookeeper-3.4.5.tar.gz/f64fef86c0bf2e5e0484d19425b22dcb/zookeeper-3.4.5.tar.gz"
                         hosts: "{$.signals.compute.*.networks.eth0.ip}"
+              - restart-exhibitor:
+                  action: execrun
+                  precedingPhases: [ deploy-zoo ]
+                  parameters:
+                      isSudo: true
+                      roles: [ compute ]
+                      command:
+                          - /etc/init.d/exhibitor restart
+              - restart-cluster:
+                  action: restcall
+                  precedingPhases: [ restart-exhibitor ]
+                  parameters:
+                    retryCount: 10
+                    command: "http://{$.signals.compute.*.networks.public.ip[0]}:{$.exhibitor-port}/exhibitor/v1/cluster/restart"
+                    method: GET
+           #       contentType: application/json
             return: ### Values returned from workflow
               zookeeper-hosts: { value: "{$.signals.compute.*.networks.public.ip}"}
               zookeeper-ui: { value: "http://{$.signals.compute.*.networks.public.ip}:{$.exhibitor-port}/exhibitor/v1/ui/index.html" }
