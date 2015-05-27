@@ -30,10 +30,10 @@ application:
       zoo-nodes: "bind(zookeeper#result.zookeeper-nodes)"
       zoo-hosts: "bind(zookeeper#result.zookeeper-hosts)"
       zoo-ui: "bind(zookeeper#result.zookeeper-ui)"
+      zoo-urls: "bind(zookeeper#result.zookeeper-urls)"
 
 
 ####### Components definitions ########
- 
   components:
     metadata:
       type: cobalt.common.Constants
@@ -89,6 +89,9 @@ application:
           zookeeper-ui:
              type: publish-signal(list<string>)
              name: Exhibitors UI
+          zookeeper-urls:
+             type: publish-signal(list<string>)
+             name: Zookeper urls (private)
       configuration:
         configuration.workflows:
           launch: ### Launch workflow used for provision/install phase
@@ -110,6 +113,7 @@ application:
                   phase: deploy-zoo
                   precedingPhases: [ provision ]
                   parameters:
+                    version: "11.16.2"
                     isSolo: true
                     retryCount: 3
                     roles: [ default ]
@@ -133,4 +137,6 @@ application:
                 value: "http://{$.zoo-hosts}:{$.exhibitor-port}/exhibitor/v1/ui/index.html"
               zookeeper-nodes:
                 value: "{$.zoo-hosts-privatIp}"
+              zookeeper-urls: 
+                value: "{$.zoo-hosts-privatIp}:{$.zookeeper-cli-port}"
 
