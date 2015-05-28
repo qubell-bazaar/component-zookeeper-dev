@@ -105,6 +105,7 @@ application:
                     quantity: "{$.zookeeper-quantity}"
                     vmIdentity: "{$.operating-system.identity}"
                     imageId: "{$.operating-system.image}"
+                    retryCount: 5
                   output: ### Step output values will be used in workflow return section below
                     zoo-hosts: ips
                     zoo-hosts-privatIp: privateips
