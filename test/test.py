@@ -27,17 +27,6 @@ from qubell.api.testing import *
             "value": "ubuntu"
         }]
     },
-    "AmazonEC2_Ubuntu_1004": {
-        "policies": [{
-            "action": "provisionVms",
-            "parameter": "imageId",
-            "value": "us-east-1/ami-9f3906f6"
-        }, {
-            "action": "provisionVms",
-            "parameter": "vmIdentity",
-            "value": "ubuntu"
-        }]
-    }
 })
 class ZookeeperDevTestCase(BaseComponentTestCase):
     name = "component-zookeeper-dev"

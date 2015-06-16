@@ -98,7 +98,7 @@ application:
              type: publish-signal(list<string>)
              name: Zoo hosts Private IPs
           zookeeper-urls:
-             type: publish-signal(list<string>)
+             type: publish-signal(string)
              name: Zookeper urls (private)
       configuration:
         configuration.triggers:
@@ -128,6 +128,7 @@ application:
                   precedingPhases: [get-signals]
                   parameters:
                     isSolo: true
+                    version: "11.16.2"
                     retryCount: 3
                     roles: [ compute ]
                     runList: [ "recipe[cookbook-qubell-zookeeper]" ]
@@ -143,6 +144,8 @@ application:
                       zookeeper:
                         mirror: "http://pkgs.fedoraproject.org/repo/pkgs/zookeeper/zookeeper-3.4.5.tar.gz/f64fef86c0bf2e5e0484d19425b22dcb/zookeeper-3.4.5.tar.gz"
                         hosts: "{$.signals.compute.*.networks.eth0.ip}"
+                  output:
+                    chefAttrs: chefState
               - restart-exhibitor:
                   action: execrun
                   precedingPhases: [ deploy-zoo ]
@@ -163,5 +166,5 @@ application:
               zookeeper-hosts: { value: "{$.signals.compute.*.networks.public.ip}"}
               zookeeper-ui: { value: "http://{$.signals.compute.*.networks.public.ip}:{$.exhibitor-port}/exhibitor/v1/ui/index.html" }
               zookeeper-nodes: { value: "{$.signals.compute.*.networks.eth0.ip}" }
-              zookeeper-urls: { value: "{$.signals.compute.*.networks.eth0.ip}:{$.zookeeper-cli-port}" }
+              zookeeper-urls: { value: "{$.chefAttrs.*.zookeeper.connect_uri[0]}" }
           launch: *update
