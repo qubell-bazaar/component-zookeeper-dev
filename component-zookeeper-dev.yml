@@ -9,7 +9,7 @@ application:
     input.zookeeper-cli-port: 2181 #### Port for client connections
     input.zookeeper-elect-port: 3888 ### Port for server connections during the leader election phase
     input.exhibitor-port: 8090 ### Exhibitor ui port
-    input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-c63aafa.tar.gz" ### Chef cookbooks Url
+    input.recipe-url: "https://s3.amazonaws.com/qubell-starter-kit-artifacts/qubell-bazaar/component-zookeeper-dev-cookbooks-stable-81fad03.tar.gz" ### Chef cookbooks Url
     input.instance-size: "g1-small" ###GCE  Instance type
 
 # Root Application Interfaces.
