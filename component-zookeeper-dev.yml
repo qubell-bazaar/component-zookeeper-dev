@@ -110,6 +110,7 @@ application:
                     roles: [ default ]
                     runList: [ "recipe[cookbook-qubell-zookeeper]" ]
                     recipeUrl: "{$.recipe-url}"
+                    version: "11.18.12"
                     jattrs:
                       exhibitor:
                         opts:
